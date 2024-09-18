@@ -14,5 +14,13 @@
     "Email": "gurung7@gmail.com",
     "Password": "gurung7",
     "Role": "consumer"
+  },
+  {
+    "id": 3,
+    "FirstName": "Amit",
+    "LastName": "Lama",
+    "Email": "lama@gmail.com",
+    "Password": "lama7",
+    "Role": "donor"
   }
 ]

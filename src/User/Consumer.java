@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Consumer extends User {
-    private static List<Donors> claimedDonationList = new ArrayList<>();
+    private static List<Donors> claimedDonationsList = new ArrayList<>();
+
     // Constructor for Consumer class, calling User class constructor with super()
     public Consumer(int id, String firstName, String lastName, String email, String password) {
         super(id, firstName, lastName, email, password, "consumer");

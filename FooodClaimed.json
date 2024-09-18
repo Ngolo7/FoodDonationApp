@@ -1,0 +1,16 @@
+[
+  {
+    "typeOfFood": "Pasta",
+    "quantity": 4.0,
+    "expDate": "2024-09-18",
+    "unit": 3.0,
+    "donorCounter": 2,
+    "status": "claimed",
+    "id": 3,
+    "FirstName": "Amit",
+    "LastName": "Lama",
+    "Email": "lama@gmail.com",
+    "Password": "lama7",
+    "Role": "donor"
+  }
+]
