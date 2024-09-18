@@ -7,6 +7,9 @@ public class UserApp {
 
 
     private static List<User> usersList = new ArrayList<>();
+    private static List<Donors> donorList = new ArrayList<>();
+    public static List<Donors> claimedDonationsList = new ArrayList<>();
+
 
 
 
@@ -90,7 +93,73 @@ public class UserApp {
     }
 
     private static void customerPortal(Scanner scanner, User user) {
+        if (user.getRole().equalsIgnoreCase("consumer")) {
+            // Convert the user object to Consumer
+            Consumer consumer = new Consumer(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword());
 
+            System.out.println("Welcome to the Consumer Portal!");
+            while (true) {
+                System.out.println("1. View Profile");
+                System.out.println("2. View Available Donations");
+                System.out.println("3. Claim a Donation");
+                System.out.println("4. View Claimed Donations");
+                System.out.println("5. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine();  // Consume newline
+
+                switch (choice) {
+                    case 1:
+                        consumer.viewProfile();
+                        break;
+                    case 2:
+                        consumer.viewAvailableDonations(donorList);  // Pass the list of donations
+                        break;
+                    case 3:
+                        System.out.print("Enter the donation ID you want to claim: ");
+                        int donationId = scanner.nextInt();
+                        consumer.claimDonation(donationId, donorList);  // Pass the list of donations
+                        break;
+                    case 4:
+                        System.out.print("List of claimed Donations: ");
+                        consumer.viewClaimedDonations();
+
+                    case 5:
+                        System.out.println("Exiting the consumer portal...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice, please try again.");
+                }
+            }
+        } else {
+            System.out.println("Invalid user role.");
+        }
     }
-    private static void donorPortal(Scanner scanner, User user) {}
+
+
+    private static void donorPortal(Scanner scanner, User user) {
+        System.out.println("Welcome to the Donor Portal!");
+
+        System.out.print("Enter type of food: ");
+        String typeOfFood = scanner.nextLine();
+
+        System.out.print("Enter quantity: ");
+        double quantity = scanner.nextDouble();
+
+        scanner.nextLine(); // Consume the newline
+
+        System.out.print("Enter expiration date (YYYY-MM-DD): ");
+        String expDate = scanner.nextLine();
+
+        System.out.print("Enter unit (kg, grams, liters): ");
+        double unit = scanner.nextDouble();
+
+        scanner.nextLine(); // Consume the newline
+
+        // Create a new donor donation and add it to the list
+        Donors donor = new Donors(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), typeOfFood, quantity, expDate, unit);
+        donorList.add(donor);
+
+        System.out.println("Donation registered successfully: " + donor);
+    }
 }

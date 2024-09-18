@@ -1,9 +1,10 @@
 package User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Consumer extends User {
-
+    private static List<Donors> claimedDonationList = new ArrayList<>();
     // Constructor for Consumer class, calling User class constructor with super()
     public Consumer(int id, String firstName, String lastName, String email, String password) {
         super(id, firstName, lastName, email, password, "consumer");
@@ -37,11 +38,29 @@ public class Consumer extends User {
     public void claimDonation(int donationId, List<Donors> donationsList) {
         for (Donors donation : donationsList) {
             if (donation.getDonationId() == donationId && donation.getStatus().equalsIgnoreCase("available")) {
+
+
                 donation.setStatus("claimed");
+                UserApp.claimedDonationsList.add(donation);
+                // viewClaimedDonations(claimedDonationList);
                 System.out.println("You have successfully claimed the donation: " + donation);
                 return;
             }
         }
         System.out.println("The donation is either not available or has already been claimed.");
+    }
+
+    // Method to view claimed donations
+    public void viewClaimedDonations() {
+        if (UserApp.claimedDonationsList.isEmpty()) {
+            System.out.println("You have not claimed any donations yet.");
+        } else {
+            System.out.println("Your claimed donations:");
+            for (Donors donation : UserApp.claimedDonationsList) {
+                if (donation.getStatus().equalsIgnoreCase("claimed")) {
+                    System.out.println(donation);
+                }
+            }
+        }
     }
 }
