@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class UserApp {
 
     private static final String FILE_PATH = "users.json";
+    private static final String FOOD_FILE_PATH = "Foods.json";  // Ensure this path is correct
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
@@ -26,6 +27,7 @@ public class UserApp {
         Scanner scanner = new Scanner(System.in);
 
         loadUsersFromFile();
+        loadFoodFromFile();
 
 
         while (true) {
@@ -130,6 +132,7 @@ public class UserApp {
                         System.out.print("Enter the donation ID you want to claim: ");
                         int donationId = scanner.nextInt();
                         consumer.claimDonation(donationId, donorList);  // Pass the list of donations
+                        FoodToFile();  // Save the changes after claiming the donation
                         break;
                     case 4:
                         System.out.print("List of claimed Donations: ");
@@ -170,6 +173,7 @@ public class UserApp {
         // Create a new donor donation and add it to the list
         Donors donor = new Donors(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), typeOfFood, quantity, expDate, unit);
         donorList.add(donor);
+        FoodToFile();
 
         System.out.println("Donation registered successfully: " + donor);
     }
@@ -205,7 +209,41 @@ public class UserApp {
         }
     }
 
+    private static void loadFoodFromFile() {
+        File file = new File(FOOD_FILE_PATH);
+        System.out.println("Loading food donations from: " + file.getAbsolutePath());  // Print file path for debugging
 
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                System.out.println("No existing food donation data found. A new file will be created.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try (BufferedReader reader = new BufferedReader(new FileReader(FOOD_FILE_PATH))) {
+                Type listType = new TypeToken<ArrayList<Donors>>() {}.getType();
+                donorList = gson.fromJson(reader, listType);
+                if (donorList == null) {
+                    donorList = new ArrayList<>();
+                }
+                System.out.println("Loaded " + donorList.size() + " donations.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    private static void FoodToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FOOD_FILE_PATH))) {
+            writer.write(gson.toJson(donorList));  // Write JSON with indentation
+            System.out.println("Food donation data saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving food data: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 }
+
+

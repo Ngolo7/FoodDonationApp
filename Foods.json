@@ -1,18 +1,16 @@
 [
   {
+    "typeOfFood": "Pizza",
+    "quantity": 5.0,
+    "expDate": "2024-09-19",
+    "unit": 4.0,
+    "donorCounter": 2,
+    "status": "claimed",
     "id": 1,
     "FirstName": "Sandeeb",
     "LastName": "Adhikari",
     "Email": "adhikari@gmail.com",
     "Password": "123456@",
     "Role": "donor"
-  },
-  {
-    "id": 2,
-    "FirstName": "Michael",
-    "LastName": "Gurung",
-    "Email": "gurung7@gmail.com",
-    "Password": "gurung7",
-    "Role": "consumer"
   }
 ]
