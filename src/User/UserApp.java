@@ -157,13 +157,44 @@ public class UserApp {
     private static void donorPortal(Scanner scanner, User user) {
         System.out.println("Welcome to the Donor Portal!");
 
+        Donors donor = new Donors(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), "", 0, "", 0);
+
+        while (true) {
+            System.out.println("1. View Profile");
+            System.out.println("2. Donate Food");
+            System.out.println("3. View Donated Food List");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1:
+                    donor.viewProfile();  // View donor's profile
+                    break;
+                case 2:
+                    donateFood(scanner, donor);  // Donor can donate food
+                    break;
+                case 3:
+                    viewDonatedFoodList(donor);  // View all donated food by this donor
+                    break;
+                case 4:
+                    System.out.println("Exiting the donor portal...");
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+        }
+    }
+
+    private static void donateFood(Scanner scanner, Donors donor) {
         System.out.print("Enter type of food: ");
         String typeOfFood = scanner.nextLine();
 
         System.out.print("Enter quantity: ");
         double quantity = scanner.nextDouble();
 
-        scanner.nextLine(); // Consume the newline
+        scanner.nextLine();  // Consume the newline
 
         System.out.print("Enter expiration date (YYYY-MM-DD): ");
         String expDate = scanner.nextLine();
@@ -171,15 +202,33 @@ public class UserApp {
         System.out.print("Enter unit (kg, grams, liters): ");
         double unit = scanner.nextDouble();
 
-        scanner.nextLine(); // Consume the newline
+        scanner.nextLine();  // Consume the newline
 
         // Create a new donor donation and add it to the list
-        Donors donor = new Donors(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), typeOfFood, quantity, expDate, unit);
-        donorList.add(donor);
-        FoodToFile();
+        Donors newDonation = new Donors(donor.getId(), donor.getFirstName(), donor.getLastName(), donor.getEmail(), donor.getPassword(), typeOfFood, quantity, expDate, unit);
+        donorList.add(newDonation);
+        FoodToFile();  // Save the updated list to the file
 
-        System.out.println("Donation registered successfully: " + donor);
+        System.out.println("Donation registered successfully: " + newDonation);
     }
+
+    private static void viewDonatedFoodList(Donors donor) {
+        System.out.println("Your Donated Food List:");
+        boolean hasDonations = false;
+
+        // Loop through the donor list and show all donations from the current donor
+        for (Donors donation : donorList) {
+            if (donation.getDonationId() == donor.getId()) {
+                System.out.println(donation);
+                hasDonations = true;
+            }
+        }
+
+        if (!hasDonations) {
+            System.out.println("You have not donated any food yet.");
+        }
+    }
+
 
     private static void loadUsersFromFile() {
         File file = new File(FILE_PATH);

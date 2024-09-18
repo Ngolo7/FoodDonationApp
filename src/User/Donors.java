@@ -62,6 +62,10 @@ public class Donors extends User {
         this.status = status;
     }
 
+    public void viewProfile() {
+        System.out.println("Donors Profile: " + this);
+    }
+
     @Override
     public String toString() {
         return "Donors  [ Donor ID=" + getDonationId() + ", typeOfFood=" + typeOfFood + ", quantity=" + quantity + ", expDate=" + expDate +  ", Status: " + status + "]";
