@@ -5,8 +5,9 @@ public class Donors extends User {
     private double quantity;
     private String expDate;
     private double unit;
-    private int donorCounter = 1;
     private String status;
+    private static int counterIdTracker = 1;  // Track unique counterId for each donor
+    private int counterId;  // Unique ID for each donation made by the donor
 
     // Constructor for Donors class, calling User class constructor with super()
     public Donors(int id, String firstName, String lastName, String email, String password, String typeOfFood, double quantity, String expDate, double unit) {
@@ -16,7 +17,8 @@ public class Donors extends User {
         this.expDate = expDate;
         this.unit = unit;
         this.status = "available";
-        donorCounter++;
+        this.counterId = counterIdTracker++;  // Assign and increment the counterId for each new donation
+
     }
 
     public String getTypeOfFood() {
@@ -33,6 +35,10 @@ public class Donors extends User {
 
     public double getUnit() {
         return unit;
+    }
+
+    public int getCounterId() {
+        return counterId;
     }
 
     public void setTypeOfFood(String typeOfFood) {
@@ -62,12 +68,8 @@ public class Donors extends User {
         this.status = status;
     }
 
-    public void viewProfile() {
-        System.out.println("Donors Profile: " + this);
-    }
-
     @Override
     public String toString() {
-        return "Donors  [ Donor ID=" + getDonationId() + ", typeOfFood=" + typeOfFood + ", quantity=" + quantity + ", expDate=" + expDate +  ", Status: " + status + "]";
+        return "Donors  [ Donor ID= " + getDonationId() + "Counter ID= " + counterId +  ", typeOfFood=" + typeOfFood + ", quantity=" + quantity + ", expDate=" + expDate +  ", Status: " + status + "]";
     }
 }

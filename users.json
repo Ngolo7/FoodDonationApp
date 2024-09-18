@@ -22,5 +22,13 @@
     "Email": "lama@gmail.com",
     "Password": "lama7",
     "Role": "donor"
+  },
+  {
+    "id": 4,
+    "FirstName": "Dawa",
+    "LastName": "Lama",
+    "Email": "lama@gmail.com",
+    "Password": "lama7",
+    "Role": "donor"
   }
 ]

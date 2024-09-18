@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Consumer extends User {
-    private static List<Donors> claimedDonationsList = new ArrayList<>();
+    private static List<Donors> claimedDonationList = new ArrayList<>();
 
     // Constructor for Consumer class, calling User class constructor with super()
     public Consumer(int id, String firstName, String lastName, String email, String password) {
@@ -32,7 +32,13 @@ public class Consumer extends User {
 
     // View consumer profile
     public void viewProfile() {
-        System.out.println("Consumer Profile: " + this);
+
+        //System.out.println("Consumer Profile: " + this);
+        System.out.println("Consumer Profile:");
+        System.out.println("Name: " + getFirstName() + " " + getLastName());
+        System.out.println("Email: " + getEmail());
+        System.out.println("Email: " + getPassword());
+        System.out.println("Role: " + getRole());
     }
 
     // Claim a donation by setting its status to "claimed"

@@ -170,7 +170,7 @@ public class UserApp {
 
             switch (choice) {
                 case 1:
-                    donor.viewProfile();  // View donor's profile
+                    viewProfile(user);  // View donor's profile
                     break;
                 case 2:
                     donateFood(scanner, donor);  // Donor can donate food
@@ -185,6 +185,13 @@ public class UserApp {
                     System.out.println("Invalid choice, please try again.");
             }
         }
+    }
+    private static void viewProfile(User user) {
+        System.out.println("Donor Profile:");
+        System.out.println("Name: " + user.getFirstName() + " " + user.getLastName());
+        System.out.println("Email: " + user.getEmail());
+        System.out.println("Email: " + user.getPassword());
+        System.out.println("Role: " + user.getRole());
     }
 
     private static void donateFood(Scanner scanner, Donors donor) {
