@@ -1,9 +1,18 @@
 package User;
+import java.io.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class UserApp {
+
+    private static final String FILE_PATH = "users.json";
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
     private static List<User> usersList = new ArrayList<>();
@@ -15,6 +24,8 @@ public class UserApp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        loadUsersFromFile();
 
 
         while (true) {
@@ -35,7 +46,7 @@ public class UserApp {
                     break;
                 case 3:
                     System.out.println("Exiting the system...");
-
+                    saveUsersToFile();
                     System.exit(0);
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -62,8 +73,8 @@ public class UserApp {
         // Create User object and add it to the list
         User newUser = new User(id, firstName, lastName, email, password, role);
         usersList.add(newUser);
-
-
+        saveUsersToFile();
+        
         System.out.println("Signup successful! Please login to continue.");
     }
     private static void login(Scanner scanner) {
@@ -162,4 +173,39 @@ public class UserApp {
 
         System.out.println("Donation registered successfully: " + donor);
     }
+
+    private static void loadUsersFromFile() {
+        File file = new File(FILE_PATH);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                System.out.println("No existing user data found. A new file will be created.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+                Type listType = new TypeToken<ArrayList<User>>() {}.getType();
+                usersList = gson.fromJson(reader, listType);
+                if (usersList == null) {
+                    usersList = new ArrayList<>();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void saveUsersToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            writer.write(gson.toJson(usersList)); // Write JSON with indentation
+            System.out.println("User data saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 }
