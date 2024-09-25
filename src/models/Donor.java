@@ -1,6 +1,6 @@
-package User;
+package models;
 
-public class Donors extends User {
+public class Donor extends User {
     private String typeOfFood;
     private double quantity;
     private String expDate;
@@ -10,7 +10,7 @@ public class Donors extends User {
     private int claimedBy;
 
     // Constructor for Donors class, calling User class constructor with super()
-    public Donors(int id, String firstName, String lastName, String email, String password, String typeOfFood, double quantity, String expDate, double unit, int counterId) {
+    public Donor(int id, String firstName, String lastName, String email, String password, String typeOfFood, double quantity, String expDate, double unit, int counterId) {
         super(id, firstName, lastName, email, password, "donor");
         this.typeOfFood = typeOfFood;
         this.quantity = quantity;
@@ -45,6 +45,7 @@ public class Donors extends User {
         return claimedBy;
     }
 
+
     public void setTypeOfFood(String typeOfFood) {
         this.typeOfFood = typeOfFood;
     }
@@ -73,10 +74,13 @@ public class Donors extends User {
     }
     public void setClaimedBy(int claimedBy) {
         this.claimedBy = claimedBy;
+}
+   @Override
+   public String toString() {
+       return "Donors  [ Donor ID= " + getId() + ", Counter ID= " + counterId +  ", typeOfFood=" + typeOfFood + ", quantity=" + quantity + ", expDate=" + expDate +  ", Status: " + status + "]";
     }
-
-    @Override
-    public String toString() {
-        return "Donors  [ Donor ID= " + getId() + ", Counter ID= " + counterId +  ", typeOfFood=" + typeOfFood + ", quantity=" + quantity + ", expDate=" + expDate +  ", Status: " + status + "]";
-    }
+  //@Override
+ //public void showProfile() {
+    //  System.out.println("Donor ID: " + getId() + ", Name: " + getFirstName() + " " + getLastName() + ", Email: " + getEmail());
+  //}
 }

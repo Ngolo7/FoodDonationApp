@@ -14,12 +14,15 @@ public class UserApp {
     private static final String FILE_PATH = "users.json";
     private static final String FOOD_FILE_PATH = "Foods.json";
     private static final String FOODClAIMED_FILE_PATH = "FooodClaimed.json";
+    private static final String DONATION_ID_COUNTER_FILE = "donation_counter.json";
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private static List<User> usersList = new ArrayList<>();
     private static List<Donors> donorList = new ArrayList<>();
     public static List<Donors> claimedDonationsList = new ArrayList<>();
 
+    // To store the current donation ID counter
+    private static int donationIdCounter;
 
 
 
@@ -29,6 +32,7 @@ public class UserApp {
         loadUsersFromFile();
         loadFoodFromFile();
         loadClaimedFoodFromFile();
+        loadDonationIdCounter();
 
 
 
@@ -51,6 +55,7 @@ public class UserApp {
                 case 3:
                     System.out.println("Exiting the system...");
                     saveUsersToFile();
+                    saveDonationIdCounter();
                     System.exit(0);
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -78,7 +83,6 @@ public class UserApp {
         User newUser = new User(id, firstName, lastName, email, password, role);
         usersList.add(newUser);
         saveUsersToFile();
-        
         System.out.println("Signup successful! Please login to continue.");
     }
     private static void login(Scanner scanner) {
@@ -140,6 +144,7 @@ public class UserApp {
                     case 4:
                         System.out.print("List of claimed Donations: ");
                         consumer.viewClaimedDonations();
+                        break;
 
                     case 5:
                         System.out.println("Exiting the consumer portal...");
@@ -157,7 +162,7 @@ public class UserApp {
     private static void donorPortal(Scanner scanner, User user) {
         System.out.println("Welcome to the Donor Portal!");
 
-        Donors donor = new Donors(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), "", 0, "", 0);
+        Donors donor = new Donors(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), "", 0.0, "", 0.0, donationIdCounter++);
 
         while (true) {
             System.out.println("1. View Profile");
@@ -212,8 +217,10 @@ public class UserApp {
         scanner.nextLine();  // Consume the newline
 
         // Create a new donor donation and add it to the list
-        Donors newDonation = new Donors(donor.getId(), donor.getFirstName(), donor.getLastName(), donor.getEmail(), donor.getPassword(), typeOfFood, quantity, expDate, unit);
+        Donors newDonation = new Donors(donor.getId(), donor.getFirstName(), donor.getLastName(), donor.getEmail(), donor.getPassword(), typeOfFood, quantity, expDate, unit, donationIdCounter++);
         donorList.add(newDonation);
+        // Save the updated donation ID counter and food data
+        saveDonationIdCounter();
         FoodToFile();  // Save the updated list to the file
 
         System.out.println("Donation registered successfully: " + newDonation);
@@ -335,7 +342,28 @@ public class UserApp {
             e.printStackTrace();
         }
     }
+    // Load donation ID counter from file
+    private static void loadDonationIdCounter() {
+        File file = new File(DONATION_ID_COUNTER_FILE);
+        if (!file.exists()) {
+            donationIdCounter = 1;  // Start counter from 1 if no file exists
+        } else {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                donationIdCounter = Integer.parseInt(reader.readLine());
+            } catch (IOException | NumberFormatException e) {
+                donationIdCounter = 1;  // Reset to 1 if there is an issue reading the file
+            }
+        }
+    }
 
+    // Save donation ID counter to file
+    private static void saveDonationIdCounter() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(DONATION_ID_COUNTER_FILE))) {
+            writer.write(Integer.toString(donationIdCounter));
+        } catch (IOException e) {
+            System.out.println("Error saving donation ID counter: " + e.getMessage());
+        }
+    }
 
 }
 

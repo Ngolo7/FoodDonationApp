@@ -1,4 +1,4 @@
-package User;
+package models;
 
 public class User {
     private int id;
@@ -52,7 +52,7 @@ public class User {
             System.out.println("FirstName is null or empty");
         }
         else{
-        this.FirstName = firstName;}
+            this.FirstName = firstName;}
     }
 
     public void setLastName(String lastName) {
@@ -62,7 +62,7 @@ public class User {
         }
         else{
 
-        this.LastName = lastName;}
+            this.LastName = lastName;}
     }
 
     public void setEmail(String email) {
@@ -84,8 +84,9 @@ public class User {
         this.Role = role;
     }
 
-    @Override
-    public String toString() {
+   @Override
+   public String toString() {
         return "User [id=" + id + ", FirstName=" + FirstName + ", LastName=" + LastName + ", Email=" + Email + ", Password=" + Password + ", Role=" + Role + "]";
-    }
+   }
+
 }
