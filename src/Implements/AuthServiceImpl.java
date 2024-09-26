@@ -64,20 +64,29 @@ public class AuthServiceImpl implements UserInterface {
 
     // Helper method to gather user registration data
     private User getInputAndRegister() {
-        System.out.println("Enter Full Name:");
-        String fullName = scanner.nextLine();
+        String fullName;
+        do {
+            System.out.println("Enter Full Name (No numbers allowed):");
+            fullName = scanner.nextLine();
+            if (!isValidName(fullName)) {
+                System.out.println("Invalid name. Names should not contain numbers. Please try again.");
+            }
+        } while (!isValidName(fullName));  // Loop until valid name is entered
         String[] nameParts = fullName.split(" ", 2);
         String firstName = nameParts[0];
         String lastName = (nameParts.length > 1) ? nameParts[1] : "";
-       // Email check loop to ensure unique email
+
+        // Email check loop to ensure valid and unique email
         String email;
         do {
-            System.out.println("Enter Email:");
+            System.out.println("Enter Email (Must be a valid @gmail.com address):");
             email = scanner.nextLine();
-            if (emailExists(email)) {
+            if (!isValidEmail(email)) {
+                System.out.println("Invalid email format. Please enter a valid @gmail.com email.");
+            } else if (emailExists(email)) {
                 System.out.println("Email already exists. Please try another email.");
             }
-        } while (emailExists(email));  // Loop until a unique email is entered
+        } while (!isValidEmail(email) || emailExists(email));  // Loop until valid and unique email is entered
 
         System.out.println("Enter Password:");
         String password = scanner.nextLine();
@@ -111,6 +120,15 @@ public class AuthServiceImpl implements UserInterface {
             }
         }
         return false;  // Email does not exist
+    }
+    // Helper method to validate that the email ends with @gmail.com
+    private boolean isValidEmail(String email) {
+        return email.matches("^[\\w-\\.]+@gmail\\.com$");
+    }
+
+    // Helper method to validate that the name does not contain numbers
+    private boolean isValidName(String name) {
+        return !name.matches(".*\\d.*");  // Returns true if name does not contain any digits
     }
     // Method to create consumer-specific data
     private Consumer createConsumerData(User user) {
