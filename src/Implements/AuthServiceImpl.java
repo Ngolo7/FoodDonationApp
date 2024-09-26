@@ -88,8 +88,16 @@ public class AuthServiceImpl implements UserInterface {
             }
         } while (!isValidEmail(email) || emailExists(email));  // Loop until valid and unique email is entered
 
-        System.out.println("Enter Password:");
-        String password = scanner.nextLine();
+        // Password check loop to ensure password is set
+        String password;
+        do {
+            System.out.println("Enter Password (Password cannot be empty):");
+            password = scanner.nextLine();
+            if (password.trim().isEmpty()) {
+                System.out.println("Password cannot be empty. Please enter a valid password.");
+            }
+        } while (password.trim().isEmpty());  // Loop until a valid password is entered
+
         String role = null;
         boolean validRole = false;
         do {

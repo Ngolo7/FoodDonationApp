@@ -18,5 +18,25 @@
     "status": "claimed",
     "counterId": 5,
     "claimedBy": 5
+  },
+  {
+    "donorId": 5,
+    "typeOfFood": "Briyani",
+    "quantity": 50.0,
+    "unit": 45.0,
+    "expDate": "2024-09-27",
+    "status": "available",
+    "counterId": 6,
+    "claimedBy": -1
+  },
+  {
+    "donorId": 7,
+    "typeOfFood": "pasta",
+    "quantity": 100.0,
+    "unit": 100.0,
+    "expDate": "2024-09-27",
+    "status": "available",
+    "counterId": 7,
+    "claimedBy": -1
   }
 ]

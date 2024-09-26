@@ -24,19 +24,35 @@
     "Role": "Donor"
   },
   {
-    "id": 5,
+    "id": 4,
     "FirstName": "kenjo",
     "LastName": "gurung",
     "Email": "kenjo@gmail.com",
-    "Password": "1234",
+    "Password": "kenjo7",
     "Role": "Consumer"
   },
   {
     "id": 5,
-    "FirstName": "Hira",
-    "LastName": "shretha",
-    "Email": "shretha@gmail.com",
-    "Password": "",
+    "FirstName": "Salman",
+    "LastName": "khan",
+    "Email": "khan7@gmail.com",
+    "Password": "khan7",
+    "Role": "Donor"
+  },
+  {
+    "id": 5,
+    "FirstName": "Salman",
+    "LastName": "khan",
+    "Email": "khan7@gmail.com",
+    "Password": "khan7",
+    "Role": "donor"
+  },
+  {
+    "id": 7,
+    "FirstName": "Cristiano",
+    "LastName": "ronaldo",
+    "Email": "cris7@gmail.com",
+    "Password": "suiii",
     "Role": "Donor"
   },
   {
@@ -45,11 +61,11 @@
     "status": "available",
     "counterId": 0,
     "claimedBy": -1,
-    "id": 5,
-    "FirstName": "Hira",
-    "LastName": "shretha",
-    "Email": "shretha@gmail.com",
-    "Password": "",
+    "id": 7,
+    "FirstName": "Cristiano",
+    "LastName": "ronaldo",
+    "Email": "cris7@gmail.com",
+    "Password": "suiii",
     "Role": "donor"
   }
 ]
