@@ -46,7 +46,6 @@ public class Donor extends User {
         return claimedBy;
     }
 
-
     public void setTypeOfFood(String typeOfFood) {
         this.typeOfFood = typeOfFood;
     }

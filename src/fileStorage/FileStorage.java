@@ -17,16 +17,17 @@ import java.util.List;
 public class FileStorage {
 
     private static final String USER_FILE_PATH = "users.json";
-    private static final String DONATION_FILE_PATH = "donations.json";
-    private static final String CLAIMED_DONATION_FILE_PATH = "claimedDonations.json";
+    private static final String DONATION_FILE_PATH = "donations.json";  // NEW: Path for donation data
+    private static final String CLAIMED_DONATION_FILE_PATH = "claimedDonations.json";  // Renamed for clarity
     private static final String DONATION_ID_COUNTER_FILE = "donation_counter.json";
 
     private static Gson gson = new Gson();
 
+    // Instance variables for holding lists in memory
     private List<User> usersList = new ArrayList<>();
-    private List<Donation> donationList = new ArrayList<>();
-    private List<Donation> claimedDonationsList = new ArrayList<>();
-    private int donationIdCounter = 1;  // Initialized to 1 if no counter is loaded from file
+    private List<Donation> donationList = new ArrayList<>();  // NEW: List for available donations
+    private List<Donation> claimedDonationsList = new ArrayList<>();  // NEW: List for claimed donations
+    private int donationIdCounter = 1;
 
     // Load users from JSON file and correctly initialize them as Consumer or Donor
     public void loadUsersFromFile() {
@@ -41,7 +42,7 @@ public class FileStorage {
             List<User> users = gson.fromJson(reader, listType);
 
             if (users == null) {
-                usersList = new ArrayList<>();
+                usersList = new ArrayList<>();  // Initialize as empty list if no users are found
                 System.out.println("No users found in the file. Initialized empty user list.");
                 return;
             }
@@ -57,7 +58,7 @@ public class FileStorage {
     public void saveUsersToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE_PATH))) {
             Gson gsonPretty = new GsonBuilder().setPrettyPrinting().create();
-            writer.write(gsonPretty.toJson(usersList));
+            writer.write(gsonPretty.toJson(usersList)); // Write users list with pretty printing
             System.out.println("User data saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,7 +77,7 @@ public class FileStorage {
             Type listType = new TypeToken<ArrayList<Donation>>() {}.getType();
             donationList = gson.fromJson(reader, listType);
             if (donationList == null) {
-                donationList = new ArrayList<>();
+                donationList = new ArrayList<>();  // Initialize as empty list if no donations are found
             }
             System.out.println("Loaded " + donationList.size() + " donations.");
         } catch (IOException e) {
@@ -88,7 +89,7 @@ public class FileStorage {
     public void saveDonationsToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DONATION_FILE_PATH))) {
             Gson gsonPretty = new GsonBuilder().setPrettyPrinting().create();
-            writer.write(gsonPretty.toJson(donationList));
+            writer.write(gsonPretty.toJson(donationList));  // Write the donation list with pretty printing
             System.out.println("Donation data saved successfully.");
         } catch (IOException e) {
             System.out.println("Error saving donation data: " + e.getMessage());
@@ -123,7 +124,7 @@ public class FileStorage {
     public void saveClaimedDonationsToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CLAIMED_DONATION_FILE_PATH))) {
             Gson gsonPretty = new GsonBuilder().setPrettyPrinting().create();
-            writer.write(gsonPretty.toJson(claimedDonationsList));
+            writer.write(gsonPretty.toJson(claimedDonationsList));  // Save claimed donations with pretty printing
             System.out.println("Claimed donation data saved successfully.");
         } catch (IOException e) {
             System.out.println("Error saving claimed donation data: " + e.getMessage());
@@ -135,17 +136,17 @@ public class FileStorage {
     public void loadDonationIdCounter() {
         File file = new File(DONATION_ID_COUNTER_FILE);
         if (!file.exists()) {
-            donationIdCounter = 1;
+            donationIdCounter = 1;  // Start counter from 1 if no file exists
         } else {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 donationIdCounter = Integer.parseInt(reader.readLine());
             } catch (IOException | NumberFormatException e) {
-                donationIdCounter = 1;
+                donationIdCounter = 1;  // Reset to 1 if there is an issue reading the file
             }
         }
     }
 
-    // Save donation ID counter to file
+    // Save donation ID counter to file donation-_counter.json
     public void saveDonationIdCounter() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DONATION_ID_COUNTER_FILE))) {
             writer.write(Integer.toString(donationIdCounter));
@@ -164,19 +165,19 @@ public class FileStorage {
         this.usersList = usersList;
     }
 
-    public List<Donation> getDonationList() {
+    public List<Donation> getDonationList() {  // Changed return type to Donation
         return donationList;
     }
 
-    public void setDonationList(List<Donation> donationList) {
+    public void setDonationList(List<Donation> donationList) {  // Changed parameter to Donation list
         this.donationList = donationList;
     }
 
-    public List<Donation> getClaimedDonationsList() {
+    public List<Donation> getClaimedDonationsList() {  // Changed return type to Donation
         return claimedDonationsList;
     }
 
-    public void setClaimedDonationsList(List<Donation> claimedDonationsList) {
+    public void setClaimedDonationsList(List<Donation> claimedDonationsList) {  // Changed parameter to Donation list
         this.claimedDonationsList = claimedDonationsList;
     }
 

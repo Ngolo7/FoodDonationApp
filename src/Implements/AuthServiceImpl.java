@@ -62,7 +62,7 @@ public class AuthServiceImpl implements UserInterface {
         return user;
     }
 
-    // Helper method to gather user registration data
+    //  method to gather user registration data
     private User getInputAndRegister() {
         String fullName;
         do {
@@ -121,12 +121,12 @@ public class AuthServiceImpl implements UserInterface {
         }
         return false;  // Email does not exist
     }
-    // Helper method to validate that the email ends with @gmail.com
+    // method to validate that the email ends with @gmail.com
     private boolean isValidEmail(String email) {
         return email.matches("^[\\w-\\.]+@gmail\\.com$");
     }
 
-    // Helper method to validate that the name does not contain numbers
+    // Hmethod to validate that the name does not contain numbers
     private boolean isValidName(String name) {
         return !name.matches(".*\\d.*");  // Returns true if name does not contain any digits
     }

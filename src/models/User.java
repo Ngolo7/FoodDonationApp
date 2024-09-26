@@ -8,7 +8,6 @@ public class User {
     private String Password;
     private String Role;
 
-
     public User(int id, String FirstName, String LastName, String Email, String Password, String Role) {
         this.id = id;
         this.FirstName = FirstName;

@@ -30,6 +30,26 @@
     "Email": "kenjo@gmail.com",
     "Password": "1234",
     "Role": "Consumer"
+  },
+  {
+    "id": 5,
+    "FirstName": "Hira",
+    "LastName": "shretha",
+    "Email": "shretha@gmail.com",
+    "Password": "",
+    "Role": "Donor"
+  },
+  {
+    "quantity": 0.0,
+    "unit": 0.0,
+    "status": "available",
+    "counterId": 0,
+    "claimedBy": -1,
+    "id": 5,
+    "FirstName": "Hira",
+    "LastName": "shretha",
+    "Email": "shretha@gmail.com",
+    "Password": "",
+    "Role": "donor"
   }
-
 ]

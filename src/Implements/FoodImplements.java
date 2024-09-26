@@ -51,6 +51,8 @@ public class FoodImplements implements FoodInterface {
 
         return donor;
     }
+
+    //claim a donations
     @Override
     public void claimDonation(int counterId, Consumer consumer) {
         for (Donation donation : donationList) {
@@ -67,6 +69,7 @@ public class FoodImplements implements FoodInterface {
         System.out.println("Donation not found or already claimed.");
     }
 
+    //vies available donations list
     @Override
     public void viewAvailableDonations() {
         System.out.println("Available Donations:");
@@ -84,6 +87,7 @@ public class FoodImplements implements FoodInterface {
         }
     }
 
+    //view claimed donations
     @Override
     public void viewClaimedDonations(Consumer consumer) {
         System.out.println("Claimed Donations:");
@@ -101,6 +105,7 @@ public class FoodImplements implements FoodInterface {
         }
     }
 
+    //viewDonations list
     @Override
     public void viewDonatedList(Donor donor) {
         System.out.println("Your Donations:");
