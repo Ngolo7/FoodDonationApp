@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "FirstName": "sumee",
+    "LastName": "",
+    "Email": "sumee@gmail.com",
+    "Password": "sumee",
+    "Role": "Consumer"
+  },
+  {
+    "id": 2,
+    "FirstName": "Amit",
+    "LastName": "lama",
+    "Email": "lama@gmail.com",
+    "Password": "lama7",
+    "Role": "Consumer"
+  },
+  {
+    "id": 3,
+    "FirstName": "Dawa",
+    "LastName": "lama",
+    "Email": "lama7@gmail.com",
+    "Password": "lama7",
+    "Role": "Donor"
+  },
+  {
+    "id": 5,
+    "FirstName": "kenjo",
+    "LastName": "gurung",
+    "Email": "kenjo@gmail.com",
+    "Password": "1234",
+    "Role": "Consumer"
+  }
+
+]

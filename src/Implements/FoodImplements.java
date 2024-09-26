@@ -1,26 +1,29 @@
-// File: Implements/FoodImplements.java
 package Implements;
 
 import Interface.FoodInterface;
-import fileStoprage.FileStorage;
+import fileStorage.FileStorage;
 import models.Consumer;
+import models.Donation;
 import models.Donor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class FoodImplements implements FoodInterface {
-    private List<Donor> donorList = new ArrayList<>();
-    private List<Donor> claimedDonorList = new ArrayList<>();
+
     private final FileStorage fileStorage = new FileStorage();  // File storage handler
+    private List<Donation> donationList;  // CHANGE START: List for donations
+    private List<Donation> claimedDonationsList;  // CHANGE START: List for claimed donations
 
     private static final Scanner scanner = new Scanner(System.in);
 
     // Constructor to load data
     public FoodImplements() {
-        loadData();
-        fileStorage.loadDonationIdCounter();
+        fileStorage.loadDonationsFromFile();
+        fileStorage.loadClaimedDonationsFromFile();
+        fileStorage.loadDonationIdCounter();  // Load donation counter from file
+        donationList = fileStorage.getDonationList();
+        claimedDonationsList = fileStorage.getClaimedDonationsList();
     }
 
     @Override
@@ -30,35 +33,33 @@ public class FoodImplements implements FoodInterface {
         System.out.println("Enter quantity:");
         double quantity = scanner.nextDouble();
         System.out.println("Enter expiry date (YYYY-MM-DD):");
-        scanner.nextLine();  // Consume the leftover newline
+        scanner.nextLine();
         String expDate = scanner.nextLine();
         System.out.println("Enter unit:");
         double unit = scanner.nextDouble();
-        scanner.nextLine();  // Consume the leftover newline
+        scanner.nextLine();
 
-      //  int counterId = donorList.size() + 1;
-        int counterId = fileStorage.getDonationIdCounter();
-        fileStorage.setDonationIdCounter(counterId + 1);
+        int counterId = fileStorage.getDonationIdCounter();  // Get the current counter ID
+        fileStorage.setDonationIdCounter(counterId + 1);  // Increment the counter
 
-        Donor newDonation = new Donor(donor.getId(), donor.getFirstName(), donor.getLastName(), donor.getEmail(), donor.getPassword(), typeOfFood, quantity, expDate, unit, counterId);
-        donorList.add(newDonation);
+        Donation newDonation = new Donation(donor.getId(), typeOfFood, quantity, unit, expDate, "available", counterId, -1);
+        donationList.add(newDonation);
 
-        fileStorage.saveFoodToFile();
-        fileStorage.saveDonationIdCounter();
+        fileStorage.saveDonationsToFile();
+        fileStorage.saveDonationIdCounter();  // Save the updated counter
         System.out.println("Donation registered successfully!");
 
-        return newDonation;
+        return donor;
     }
-
     @Override
     public void claimDonation(int counterId, Consumer consumer) {
-        for (Donor donor : donorList) {
-            if (donor.getCounterId() == counterId && donor.getStatus().equals("available")) {
-                donor.setStatus("claimed");
-                donor.setClaimedBy(consumer.getId());
-                claimedDonorList.add(donor);
-                fileStorage.saveFoodToFile();  // Save updated donor list
-                fileStorage.saveClaimedFoodToFile();  // Save claimed list
+        for (Donation donation : donationList) {
+            if (donation.getCounterId() == counterId && donation.getStatus().equals("available")) {
+                donation.setStatus("claimed");
+                donation.setClaimedBy(consumer.getId());
+                claimedDonationsList.add(donation);  // Add to claimed donations
+                fileStorage.saveDonationsToFile();  // Save updated donation list
+                fileStorage.saveClaimedDonationsToFile();  // Save claimed donation list
                 System.out.println("Donation claimed successfully!");
                 return;
             }
@@ -70,12 +71,14 @@ public class FoodImplements implements FoodInterface {
     public void viewAvailableDonations() {
         System.out.println("Available Donations:");
         boolean found = false;
-        for (Donor donation : donorList) {
+
+        for (Donation donation : donationList) {
             if (donation.getStatus().equalsIgnoreCase("available")) {
                 System.out.println(donation.toString());
                 found = true;
             }
         }
+
         if (!found) {
             System.out.println("No available donations at the moment.");
         }
@@ -85,12 +88,14 @@ public class FoodImplements implements FoodInterface {
     public void viewClaimedDonations(Consumer consumer) {
         System.out.println("Claimed Donations:");
         boolean found = false;
-        for (Donor donation : claimedDonorList) {
+
+        for (Donation donation : claimedDonationsList) {
             if (donation.getClaimedBy() == consumer.getId()) {
                 System.out.println(donation.toString());
                 found = true;
             }
         }
+
         if (!found) {
             System.out.println("You haven't claimed any donations yet.");
         }
@@ -101,10 +106,9 @@ public class FoodImplements implements FoodInterface {
         System.out.println("Your Donations:");
         boolean found = false;
 
-        for (Donor d : donorList) {
-            // Only display donations that belong to the logged-in donor and have valid data
-            if (d.getId() == donor.getId() && d.getTypeOfFood() != null && d.getQuantity() > 0 && d.getExpDate() != null && !d.getTypeOfFood().equalsIgnoreCase("Unknown food")) {
-                System.out.println(d.toString());
+        for (Donation donation : donationList) {
+            if (donation.getDonorId() == donor.getId()) {
+                System.out.println(donation.toString());
                 found = true;
             }
         }
@@ -112,15 +116,5 @@ public class FoodImplements implements FoodInterface {
         if (!found) {
             System.out.println("You haven't donated anything yet.");
         }
-    }
-
-
-
-    // Load data from files
-    private void loadData() {
-        fileStorage.loadFoodFromFile();
-        fileStorage.loadClaimedFoodFromFile();
-        donorList = fileStorage.getDonorList();
-        claimedDonorList = fileStorage.getClaimedDonationsList();
     }
 }

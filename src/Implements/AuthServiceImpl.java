@@ -2,7 +2,7 @@
 package Implements;
 
 import Interface.UserInterface;
-import fileStoprage.FileStorage;
+import fileStorage.FileStorage;
 import models.constants.Constants;
 import models.Consumer;
 import models.Donor;
@@ -69,11 +69,18 @@ public class AuthServiceImpl implements UserInterface {
         String[] nameParts = fullName.split(" ", 2);
         String firstName = nameParts[0];
         String lastName = (nameParts.length > 1) ? nameParts[1] : "";
-        System.out.println("Enter Email:");
-        String email = scanner.nextLine();
+       // Email check loop to ensure unique email
+        String email;
+        do {
+            System.out.println("Enter Email:");
+            email = scanner.nextLine();
+            if (emailExists(email)) {
+                System.out.println("Email already exists. Please try another email.");
+            }
+        } while (emailExists(email));  // Loop until a unique email is entered
+
         System.out.println("Enter Password:");
         String password = scanner.nextLine();
-
         String role = null;
         boolean validRole = false;
         do {
@@ -96,7 +103,15 @@ public class AuthServiceImpl implements UserInterface {
         userList.add(user);
         return user;
     }
-
+    // method to check if an email already exists
+    private boolean emailExists(String email) {
+        for (User user : userList) {
+            if (user.getEmail().equalsIgnoreCase(email)) {
+                return true;  // Email already exists
+            }
+        }
+        return false;  // Email does not exist
+    }
     // Method to create consumer-specific data
     private Consumer createConsumerData(User user) {
         Consumer consumer = new Consumer(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), user.getRole());

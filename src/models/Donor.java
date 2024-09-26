@@ -41,6 +41,7 @@ public class Donor extends User {
     public int getCounterId() {
         return counterId;
     }
+
     public int getClaimedBy() {
         return claimedBy;
     }
@@ -61,10 +62,12 @@ public class Donor extends User {
     public void setUnit(double unit) {
         this.unit = unit;
     }
+
     // Getter for Donation ID (this uses the inherited id field from the User class)
     public int getDonationId() {
         return getId();
     }
+
     public String getStatus() {
         return status;
     }
@@ -72,15 +75,14 @@ public class Donor extends User {
     public void setStatus(String status) {
         this.status = status;
     }
+
     public void setClaimedBy(int claimedBy) {
         this.claimedBy = claimedBy;
-}
-   @Override
-   public String toString() {
-       return "Donors  [ Donor ID= " + getId() + ", Counter ID= " + counterId +  ", typeOfFood=" + typeOfFood + ", quantity=" + quantity + ", expDate=" + expDate +  ", Status: " + status + "]";
     }
-  //@Override
- //public void showProfile() {
-    //  System.out.println("Donor ID: " + getId() + ", Name: " + getFirstName() + " " + getLastName() + ", Email: " + getEmail());
-  //}
+
+    @Override
+    public String toString() {
+        return "Donors  [ Donor ID= " + getId() + ", Counter ID= " + counterId + ", typeOfFood=" + typeOfFood + ", quantity=" + quantity + ", expDate=" + expDate + ", Status: "
+                + status + ", Claimed By: " + claimedBy + "]";
+    }
 }

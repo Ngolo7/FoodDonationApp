@@ -1,135 +1,168 @@
 package client;
 
+import Implements.UserImplement;
+import Interface.FoodInterface;
+import Interface.UserInterface;
 import Implements.AuthServiceImpl;
 import Implements.FoodImplements;
-import Implements.UserImplement;
-import Interface.UserInterface;
 import models.Consumer;
 import models.Donor;
 import models.User;
-import models.constants.Constants;
 
 import java.util.Scanner;
 
 public class UserAppInit {
     private static final UserImplement userImplement = new UserImplement();
+    private static final FoodImplements foodService = new FoodImplements();
     private static final UserInterface authService = new AuthServiceImpl();  // Handles user authentication/registration
-    private static final FoodImplements foodService = new FoodImplements();  // Handles food-related operations
+
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        printWelcomeMessage();
-
-        User user = null;
-        while (user == null) {
-            System.out.println("1. Login\n2. Register\nChoose an option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
-
-            if (choice == 1) {
-                user = handleLogin();
-            } else if (choice == 2) {
-                authService.registerUser();
-                System.out.println("Registration successful. Please log in.");
-                user = handleLogin();
-            } else {
-                System.out.println("Invalid option. Please try again.");
-            }
-        }
-
-        // Use equalsIgnoreCase for better matching of roles
-        if (user.getRole().equalsIgnoreCase(Constants.DONOR)) {
-            handleDonor((Donor) user);
-        } else if (user.getRole().equalsIgnoreCase(Constants.CONSUMER)) {
-            handleConsumer((Consumer) user);
-        } else {
-            System.out.println("Error: User role not recognized.");
-        }
-    }
-
-    private static void printWelcomeMessage() {
-        System.out.println("Welcome to our Donation Management System!");
-    }
-
-    private static User handleLogin() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter Email:");
-        String email = scanner.nextLine();
-        System.out.println("Enter Password:");
-        String password = scanner.nextLine();
-
-        User user = authService.loginUser(email, password);
-
-        if (user == null) {
-            System.out.println("Login failed. Please try again.");
-            return null;
-        } else {
-            System.out.println("Login successful. Welcome " + user.getFirstName() + "!");
-        }
-        return user;
-    }
-
-    // Handle Donor actions
-    private static void handleDonor(Donor donor) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(donor.getFirstName() +" is a Donor!!!!");
-
+        System.out.println("Welcome to the Food Donation System");
         boolean exit = false;
+
         while (!exit) {
-            System.out.println("1. View Profile\n2. Donate Food\n3. View My Donations\n4. Exit");
+            System.out.println("Please select an option:");
+            System.out.println("1. Login");
+            System.out.println("2. Register");
+            System.out.println("3. Exit");
+
             int choice = scanner.nextInt();
             scanner.nextLine();  // Consume newline
 
             switch (choice) {
                 case 1:
-                    userImplement.printDonorData(donor);
+                    // Login flow
+                    login(authService, foodService);
                     break;
+
                 case 2:
-                    foodService.registerDonation(donor);
+                    // Register flow and direct to login
+                    User newUser = authService.registerUser();
+                    System.out.println("Registration successful. Please log in.");
+                    login(authService, foodService);
                     break;
+
                 case 3:
-                    foodService.viewDonatedList(donor);
-                    break;
-                case 4:
+                    System.out.println("Exiting the system. Thank you!");
                     exit = true;
                     break;
+
                 default:
-                    System.out.println("Invalid option, please try again.");
+                    System.out.println("Invalid choice. Please try again.");
             }
+        }
+
+        scanner.close();
+    }
+
+    private static void login(UserInterface authService, FoodInterface foodService) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your email:");
+        String email = scanner.nextLine();
+        System.out.println("Enter your password:");
+        String password = scanner.nextLine();
+        User loggedInUser = authService.loginUser(email, password);
+
+        if (loggedInUser != null) {
+            System.out.println("Login successful!");
+
+            // Check role and provide relevant options
+            if (loggedInUser instanceof Consumer) {
+                Consumer consumer = (Consumer) loggedInUser;
+                handleConsumerActions(foodService, consumer);
+            } else if (loggedInUser instanceof Donor) {
+                Donor donor = (Donor) loggedInUser;
+                handleDonorActions(foodService, donor);
+            }
+        } else {
+            System.out.println("Login failed. Please check your credentials.");
         }
     }
 
-    // Handle Consumer actions
-    private static void handleConsumer(Consumer consumer) {
+    private static void handleConsumerActions(FoodInterface foodService, Consumer consumer) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println(consumer.getFirstName() +" is a Consumer!!!!");
+        boolean consumerExit = false;
 
-        boolean exit = false;
-        while (!exit) {
-            System.out.println("1. View Profile\n2. View Available Donations\n3. Claim Donation\n4. View Consumed Donations\n5. Exit");
+        while (!consumerExit) {
+            System.out.println("Consumer Actions:");
+            System.out.println("1. View Profile");
+            System.out.println("2. View Available Donations");
+            System.out.println("3. Claim Donation");
+            System.out.println("4. View Claimed Donations");
+            System.out.println("5. Logout");
+
             int choice = scanner.nextInt();
             scanner.nextLine();  // Consume newline
 
             switch (choice) {
                 case 1:
+                    // View Consumer Profile
                     userImplement.printConsumerData(consumer);
                     break;
+
                 case 2:
                     foodService.viewAvailableDonations();
                     break;
+
                 case 3:
-                    System.out.println("Enter the Counter ID of the donation you want to claim:");
+                    System.out.println("Enter the donation Counter ID to claim:");
                     int counterId = scanner.nextInt();
+                    scanner.nextLine();  // Consume newline
                     foodService.claimDonation(counterId, consumer);
                     break;
+
                 case 4:
                     foodService.viewClaimedDonations(consumer);
                     break;
+
                 case 5:
-                    exit = true;
+                    System.out.println("Logging out.");
+                    consumerExit = true;
                     break;
+
                 default:
-                    System.out.println("Invalid option, please try again.");
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void handleDonorActions(FoodInterface foodService, Donor donor) {
+        Scanner scanner = new Scanner(System.in);
+        boolean donorExit = false;
+
+        while (!donorExit) {
+            System.out.println("Donor Actions:");
+            System.out.println("1. View Profile");
+            System.out.println("2. Register a Donation");
+            System.out.println("3. View Donated List");
+            System.out.println("4. Logout");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1:
+                    // View Donor Profile
+                    userImplement.printDonorData(donor);
+                    break;
+
+                case 2:
+                    foodService.registerDonation(donor);
+                    break;
+
+                case 3:
+                    foodService.viewDonatedList(donor);
+                    break;
+
+                case 4:
+                    System.out.println("Logging out.");
+                    donorExit = true;
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
             }
         }
     }

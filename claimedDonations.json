@@ -1,0 +1,22 @@
+[
+  {
+    "donorId": 3,
+    "typeOfFood": "fruits",
+    "quantity": 5.0,
+    "unit": 9.0,
+    "expDate": "2024-10-10",
+    "status": "claimed",
+    "counterId": 5,
+    "claimedBy": 5
+  },
+  {
+    "donorId": 3,
+    "typeOfFood": "pizza",
+    "quantity": 5.0,
+    "unit": 5.0,
+    "expDate": "2024-09-26",
+    "status": "claimed",
+    "counterId": 4,
+    "claimedBy": 2
+  }
+]
